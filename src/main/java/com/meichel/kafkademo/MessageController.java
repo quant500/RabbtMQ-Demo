@@ -1,4 +1,4 @@
-package com.meichel.rabbtmqdemo;
+package com.meichel.kafkademo;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

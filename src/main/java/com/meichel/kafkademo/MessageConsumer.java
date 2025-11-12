@@ -1,8 +1,7 @@
-package com.meichel.rabbtmqdemo;
+package com.meichel.kafkademo;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CountDownLatch;
@@ -11,12 +10,9 @@ import java.util.concurrent.CountDownLatch;
 @Slf4j
 public class MessageConsumer {
 
-    @Value("${rabbitmq.queue.name}")
-    private String queueName;
+    private CountDownLatch counter = new CountDownLatch(1);
 
-    private final CountDownLatch counter = new CountDownLatch(1);
-
-    @RabbitListener(queues = "${rabbitmq.queue.name}")
+    @KafkaListener(topics = "${kafka.topic.name}", groupId = "demo-group")
     public void receiveMessage(String message) {
         log.info("Received message: {}", message);
         counter.countDown();
@@ -24,5 +20,9 @@ public class MessageConsumer {
 
     public CountDownLatch getCounter() {
         return counter;
+    }
+
+    public void resetCounter() {
+        this.counter = new CountDownLatch(1);
     }
 }
